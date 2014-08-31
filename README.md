@@ -61,7 +61,7 @@ can call the `readonly` function again to update the value if needed.
 ### internal
 Use the `internal` function when a property is an implementation detail which
 may or may not be present in the future and which should be kept hidden away
-from the object consumers.  Value updates will be prevented and the the property
+from the object consumers.  Value updates will be prevented and the property
 will not be enumerated.
 
  * Configurable
