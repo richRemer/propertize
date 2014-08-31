@@ -1,0 +1,27 @@
+{
+  "name": "propertize",
+  "version": "0.0.1",
+  "description": "Semantically named function wrappers for Object.defineProperty",
+  "main": "index.js",
+  "scripts": {
+    "test": "mocha"
+  },
+  "devDependencies": {
+    "mocha": "~1",
+    "expect.js": "~0.3"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/richRemer/propertize.git"
+  },
+  "keywords": [
+    "getter",
+    "setter",
+    "read-only"
+  ],
+  "author": "Richard Remer (reanjr@gmail.com)",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/richRemer/propertize/issues"
+  }
+}
