@@ -3,8 +3,8 @@ propertize Module
 The propertize module exposes semantically named wrappers for the standard
 `Object.defineProperty` function.  The three `defineProperty` flags -
 `configurable`, `enumerable`, and `writeable` - are available in all possible
-combinations as the propertize functions `field`, `hidden`, `readonly`,
-`internal`, `attribute`, `setting`, and `locked`.
+combinations as the propertize functions `regular`, `field`, `hidden`,
+`readonly`, `internal`, `attribute`, `setting`, and `locked`.
 
 Functions
 ------------------
