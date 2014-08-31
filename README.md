@@ -90,10 +90,10 @@ serialized.
  * Writeable
 
 ### locked
-Use the `locked` function to define locked and hidden value on the object.  The
-value will never change in the future and will never be enumerated.  Since the
-lock can never be unlocked, this may have security uses, ensuring a value cannot
-be messed with.
+Use the `locked` function to define a locked and hidden value on the object.
+The value will never change in the future and will never be enumerated.  Since
+the lock can never be unlocked, this may have security uses, ensuring a value
+cannot be tampered with.
 
  * Non configurable
  * Non enumerable
