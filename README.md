@@ -82,7 +82,7 @@ class can guarantee the child won't change the value later.
 ### setting
 Use the `setting` function to make a permanent, mutable prroperty which will not
 be included during enumeration.  One use might be runtime view state on a
-model object which are not intrinsic to the object and which will not be
+model object which is not intrinsic to the object and which will not be
 serialized.
 
  * Non configurable
