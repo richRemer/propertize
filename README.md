@@ -4,17 +4,19 @@ The propertize module exposes semantically named wrappers for the standard
 `Object.defineProperty` function.  The three `defineProperty` flags -
 `configurable`, `enumerable`, and `writeable` - are available in all possible
 combinations as the propertize functions `regular`, `field`, `hidden`,
-`readonly`, `internal`, `attribute`, `setting`, and `locked`.
+`readonly`, `internal`, `attribute`, `setting`, and `locked`.  Some common uses
+for setters are also available with the functions `validated` and `normalized`.
 
-Functions
-------------------
-All of the propertize functions have the following signature
+Basic Properties
+----------------
+Basic properties are those with only flags configured.  All of the propertize
+functions for configuring basic properties have the following signature:
 
 ```js
 /**
  * @param {object} obj  Object on which the property will be defined.
  * @param {string} prop Name of property to define.
- * @param {*} [val]     (optional) New value for property.
+ * @param {*} [val]     New value for property (defaults to existing value).
  */
 function(obj, prop, val);
 ```
@@ -98,3 +100,51 @@ cannot be tampered with.
  * Non configurable
  * Non enumerable
  * Non writeable
+
+Setter Properties
+-----------------
+Setter properties have a setter function associated with them.
+
+### validated
+Use the `validated` function to define a property which will reject invalid
+updates.  When attempting to set an invalid value, the update is silently
+ignored.
+
+```js
+var validated = require("propertize").validated,
+    obj = {};
+
+// configure a "foo" property which only acceptes string values
+validated(obj, "foo", function(val) {
+    return typeof val === "string";
+});
+
+// set the "foo" property
+obj.foo = "Foo";
+assert(obj.foo === "Foo");
+
+// attempt to set an invalid value
+obj.foo = 42;
+assert(obj.foo === "Foo");
+```
+
+### normalized
+Use the `normalized` function to normalize values before updating.
+
+```js
+var normalized = require("propertize").normalized,
+    obj = {};
+
+// configure a "foo" property which normalizes values to int before updating.
+normalized(obj, "foo", function(val) {
+    return isNaN(parseInt(val)) ? obj.foo : parseInt(val);
+});
+
+// set a string value
+obj.foo = "42";
+assert(obj.foo === 42);
+
+// set a float value
+obj.foo = 42.24;
+assert(obj.foo === 42);
+```
