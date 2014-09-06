@@ -113,5 +113,51 @@ describe("propertize", function() {
 
         it("should prevent writing to the property", testNoWrite("locked"));
     });
+    
+    describe(".validated", function() {
+        it("should add a new property", function() {
+            var obj = {};
+            prop.validated(obj, "foo", "FOO", function(val) {return true;});
+            expect(obj.foo).to.be("FOO");
+        });
+        
+        it("should update an existing property", function() {
+            var obj = {foo:1};
+            prop.validated(obj, "foo", "FOO", function(val) {return true;});
+            expect(obj.foo).to.be("FOO");
+        });
+        
+        it("should ignore invalid updates to the property", function() {
+            var obj = {};
+            prop.validated(obj, "foo", function(val) {
+                return typeof val === "number";
+            });
+            obj.foo = "FOO";
+            expect(obj.val).to.be(undefined);
+        });
+    });
+    
+    describe(".normalized", function() {
+        it("should add a new property", function() {
+            var obj = {};
+            prop.normalized(obj, "foo", "FOO", function(val) {return val;});
+            expect(obj.foo).to.be("FOO");
+        });
+        
+        it("should update an existing property", function() {
+            var obj = {foo:1};
+            prop.normalized(obj, "foo", "FOO", function(val) {return val;});
+            expect(obj.foo).to.be("FOO");
+        });
+        
+        it("should pass updates through normalizer", function() {
+            var obj = {};
+            prop.normalized(obj, "foo", function(val) {
+                return val.toLowerCase();
+            });
+            obj.foo = "FOO";
+            expect(obj.foo).to.be("foo");
+        });
+    });
 });
 
