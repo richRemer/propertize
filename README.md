@@ -5,7 +5,8 @@ The propertize module exposes semantically named wrappers for the standard
 `configurable`, `enumerable`, and `writeable` - are available in all possible
 combinations as the propertize functions `regular`, `field`, `hidden`,
 `readonly`, `internal`, `attribute`, `setting`, and `locked`.  Some common uses
-for setters are also available with the functions `validated` and `normalized`.
+for setters are also available with the functions `validated` and `normalized`,
+and for getters with the function `derived`.
 
 Basic Properties
 ----------------
@@ -101,9 +102,9 @@ cannot be tampered with.
  * Non enumerable
  * Non writeable
 
-Setter Properties
------------------
-Setter properties have a setter function associated with them.
+Call Properties
+---------------
+Call properties a setter and/or getter function associated with them.
 
 ### validated
 Use the `validated` function to define a property which will reject invalid
@@ -147,4 +148,20 @@ assert(obj.foo === 42);
 // set a float value
 obj.foo = 42.24;
 assert(obj.foo === 42);
+```
+
+### derived
+Use the `derived` function to calculate a property value using a getter.
+
+```js
+var derived = require("propertize").derived,
+    obj = {fname: "Muhammad", lname: "Li"};
+
+// configure a "name" property to be the concatenation of fname and lname
+derived(obj, "name", function() {
+    return this.fname + " " + this.lname;
+});
+
+// "name" is now a derived property
+assert(obj.name === "Muhammad Li");
 ```

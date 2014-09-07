@@ -159,5 +159,13 @@ describe("propertize", function() {
             expect(obj.foo).to.be("foo");
         });
     });
+    
+    describe(".derived", function() {
+        it("should add a new derived property", function() {
+            var obj = {foo:1};
+            prop.derived(obj, "bar", function() {return this.foo + 1;});
+            expect(obj.bar).to.be(2);
+        });
+    });
 });
 
