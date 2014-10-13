@@ -6,7 +6,8 @@ The propertize module exposes semantically named wrappers for the standard
 combinations as the propertize functions `regular`, `field`, `hidden`,
 `readonly`, `internal`, `attribute`, `setting`, and `locked`.  Some common uses
 for setters are also available with the functions `validated` and `normalized`,
-and for getters with the function `derived`.
+for getters with the function `derived`, and for getter/setter with the function
+`managed`.
 
 Basic Properties
 ----------------
