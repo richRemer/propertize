@@ -167,5 +167,23 @@ describe("propertize", function() {
             expect(obj.bar).to.be(2);
         });
     });
+    
+    describe(".managed", function() {
+        it("should add new property with getter/setter", function() {
+            var obj = {},
+                val = 0,
+                called = false;
+                
+            prop.managed(
+                obj, "foo",
+                function(newval) {val = newval; called = true},
+                function() {return val;}
+            );
+            
+            obj.foo = "bar";
+            expect(obj.foo).to.be("bar");
+            expect(called).to.be(true);
+        });
+    });
 });
 

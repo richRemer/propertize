@@ -165,3 +165,18 @@ derived(obj, "name", function() {
 // "name" is now a derived property
 assert(obj.name === "Muhammad Li");
 ```
+
+### managed
+Use the `managed` function to provide a getter/setter for the property.
+
+```js
+var managed = require("propertize").managed,
+    obj = {data: {}};
+
+// proxy the "id" property to/from the object's data
+managed(obj, "id", function(val) {
+    this.data.id = val;
+}, function() {
+    return this.data.id;
+});
+```
