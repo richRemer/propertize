@@ -105,7 +105,7 @@ cannot be tampered with.
 
 Call Properties
 ---------------
-Call properties a setter and/or getter function associated with them.
+Call properties have a getter and/or setter function associated with them.
 
 ### validated
 Use the `validated` function to define a property which will reject invalid
@@ -179,5 +179,19 @@ managed(obj, "id", function(val) {
     this.data.id = val;
 }, function() {
     return this.data.id;
+});
+```
+
+### triggered
+Use the `triggered` function to have a callback invoked whenever the property
+is updated.
+
+```js
+var triggered = require("propertize").triggered,
+    obj = {};
+
+// call function whenever "foo" property is changed
+triggered(obj, "foo", function(is, was) {
+    console.log("object foo changed from", was, "to", is);
 });
 ```

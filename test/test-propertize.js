@@ -185,5 +185,23 @@ describe("propertize", function() {
             expect(called).to.be(true);
         });
     });
+
+    describe(".triggered", function() {
+        it("should trigger callback when property is changed", function() {
+            var obj = {foo: 42},
+                called = false;
+
+            prop.triggered(obj, "foo", function(is, was) {
+                called = true;
+                expect(this).to.be(obj);
+                expect(is).to.be(43);
+                expect(was).to.be(42);
+            });
+
+            obj.foo = 43;
+            expect(obj.foo).to.be(43);
+            expect(called).to.be(true);
+        });
+    });
 });
 
