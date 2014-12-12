@@ -203,5 +203,34 @@ describe("propertize", function() {
             expect(called).to.be(true);
         });
     });
+
+    describe(".enumerated", function() {
+        it("should update existing property enumerable flag", function() {
+            var obj = {},
+                enumerated = false,
+                i;
+
+            prop.derived(obj, "foo", function() {return 42;});
+            for (i in obj) if (i === "foo") enumerated = true;
+            expect(enumerated).to.be(false);
+            expect(obj.foo).to.be(42);
+
+            prop.enumerated(obj, "foo");
+            for (i in obj) if (i === "foo") enumerated = true;
+            expect(enumerated).to.be(true);
+            expect(obj.foo).to.be(42);
+
+            prop.enumerated(obj, "foo", false);
+            enumerated = false;
+            for (i in obj) if (i === "foo") enumerated = true;
+            expect(enumerated).to.be(false);
+            expect(obj.foo).to.be(42);
+
+            prop.enumerated(obj, "foo", true);
+            for (i in obj) if (i === "foo") enumerated = true;
+            expect(enumerated).to.be(true);
+            expect(obj.foo).to.be(42);
+        });
+    });
 });
 
