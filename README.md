@@ -195,3 +195,7 @@ triggered(obj, "foo", function(is, was) {
     console.log("object foo changed from", was, "to", is);
 });
 ```
+
+TODO
+====
+ * document enumerated function
