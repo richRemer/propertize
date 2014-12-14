@@ -113,6 +113,64 @@ describe("propertize", function() {
 
         it("should prevent writing to the property", testNoWrite("locked"));
     });
+
+    describe(".configurable", function() {
+        it("should update existing property configurable flag", function() {
+            var obj = {},
+                desc;
+            
+            prop.derived(obj, "foo", function() {return 42;});
+            desc = Object.getOwnPropertyDescriptor(obj, "foo");
+            expect(desc.get).to.be.a("function");
+            expect(desc.configurable).to.be(true);
+            
+            prop.configurable(obj, "foo", false);
+            desc = Object.getOwnPropertyDescriptor(obj, "foo");
+            expect(desc.get).to.be.a("function");
+            expect(desc.configurable).to.be(false);
+        });
+    });
+
+    describe(".enumerable", function() {
+        it("should update existing property enumerable flag", function() {
+            var obj = {},
+                desc;
+            
+            prop.derived(obj, "foo", function() {return 42;});
+            desc = Object.getOwnPropertyDescriptor(obj, "foo");
+            expect(desc.get).to.be.a("function");
+            expect(desc.enumerable).to.be(false);
+            
+            prop.enumerable(obj, "foo");
+            desc = Object.getOwnPropertyDescriptor(obj, "foo");
+            expect(desc.get).to.be.a("function");
+            expect(desc.enumerable).to.be(true);
+            
+            prop.enumerable(obj, "foo", false);
+            desc = Object.getOwnPropertyDescriptor(obj, "foo");
+            expect(desc.get).to.be.a("function");
+            expect(desc.enumerable).to.be(false);
+            
+            prop.enumerable(obj, "foo", true);
+            desc = Object.getOwnPropertyDescriptor(obj, "foo");
+            expect(desc.get).to.be.a("function");
+            expect(desc.enumerable).to.be(true);
+        });
+    });
+
+    describe(".writable", function() {
+        it("should update existing property writable flag", function() {
+            var obj = {foo: 42},
+                desc;
+            
+            desc = Object.getOwnPropertyDescriptor(obj, "foo");
+            expect(desc.writable).to.be(true);
+            
+            prop.writable(obj, "foo", false);
+            desc = Object.getOwnPropertyDescriptor(obj, "foo");
+            expect(desc.writable).to.be(false);            
+        });
+    });
     
     describe(".validated", function() {
         it("should add a new property", function() {
@@ -201,35 +259,6 @@ describe("propertize", function() {
             obj.foo = 43;
             expect(obj.foo).to.be(43);
             expect(called).to.be(true);
-        });
-    });
-
-    describe(".enumerated", function() {
-        it("should update existing property enumerable flag", function() {
-            var obj = {},
-                enumerated = false,
-                i;
-
-            prop.derived(obj, "foo", function() {return 42;});
-            for (i in obj) if (i === "foo") enumerated = true;
-            expect(enumerated).to.be(false);
-            expect(obj.foo).to.be(42);
-
-            prop.enumerated(obj, "foo");
-            for (i in obj) if (i === "foo") enumerated = true;
-            expect(enumerated).to.be(true);
-            expect(obj.foo).to.be(42);
-
-            prop.enumerated(obj, "foo", false);
-            enumerated = false;
-            for (i in obj) if (i === "foo") enumerated = true;
-            expect(enumerated).to.be(false);
-            expect(obj.foo).to.be(42);
-
-            prop.enumerated(obj, "foo", true);
-            for (i in obj) if (i === "foo") enumerated = true;
-            expect(enumerated).to.be(true);
-            expect(obj.foo).to.be(42);
         });
     });
 });

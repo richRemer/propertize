@@ -1,18 +1,14 @@
 propertize Module
 =================
 The propertize module exposes semantically named wrappers for the standard
-`Object.defineProperty` function.  The three `defineProperty` flags -
-`configurable`, `enumerable`, and `writeable` - are available in all possible
-combinations as the propertize functions `regular`, `field`, `hidden`,
-`readonly`, `internal`, `attribute`, `setting`, and `locked`.  Some common uses
-for setters are also available with the functions `validated` and `normalized`,
-for getters with the function `derived`, and for getter/setter with the function
-`managed`.
+`Object.defineProperty` function.
 
-Basic Properties
-----------------
-Basic properties are those with only flags configured.  All of the propertize
-functions for configuring basic properties have the following signature:
+Value Property Functions
+------------------------
+Value properties have configured flags and a simple value.  There is a function
+for each combination of flags.  If getter/setter is defined for the property,
+it will be removed.  All value property functions have the following
+signature:
 
 ```js
 /**
@@ -24,93 +20,97 @@ function(obj, prop, val);
 ```
 
 ### regular
-Use the `regular` function to define a typical JS object property.  Normally
-this is done with the `=` operator, but this can be useful to reset any property
-configuration which has already taken place (e.g., by calling one of the other
-functions in this module).
+Define a property with the following configuration:
 
  * Configurable
  * Enumerable
  * Writeable
 
 ### field
-Use the `field` function to defined a permanent, enumerable property on the
-object.  `field` will ensure the property cannot be removed or locked down
-later.  Possible uses are when mapping to a field defined in a SQL schema or to
-a domain specific model and you wish the property to always be included during
-object serialization.
+Define a property with the following configuration:
 
  * Non configurable
  * Enumerable
  * Writeable
 
 ### hidden
-Use the `hidden` function to prevent a property from being enumerated.  Possible
-uses include decorating an object with dynamic metadata which should not be part
-of the object's serialization.
+Define a property with the following configuration:
 
  * Configurable
  * Non enumerable
  * Writeable
 
 ### readonly
-Use the `readonly` function to prevent the property value from being updated
-with the `=` operator.  There are many uses for a read-only property and you
-can call the `readonly` function again to update the value if needed.
+Define a property with the following configuration:
 
  * Configurable
  * Enumerable
  * Non writeable
 
 ### internal
-Use the `internal` function when a property is an implementation detail which
-may or may not be present in the future and which should be kept hidden away
-from the object consumers.  Value updates will be prevented and the property
-will not be enumerated.
+Define a property with the following configuration:
 
  * Configurable
  * Non enumerable
  * Non writeable
 
 ### attribute
-Use the `attribute` function to add a permanent value to the object.  Property
-enumeration will include the property and the property value will never change
-in the future.  One possible use is for a property set during construction of a
-base class which is selected by a sub-class.  By using an `attribute`, the base
-class can guarantee the child won't change the value later.
+Define a property with the following configuration:
 
  * Non configurable
  * Enumerable
  * Non writeable
 
 ### setting
-Use the `setting` function to make a permanent, mutable prroperty which will not
-be included during enumeration.  One use might be runtime view state on a
-model object which is not intrinsic to the object and which will not be
-serialized.
+Define a property with the following configuration:
 
  * Non configurable
  * Non enumerable
  * Writeable
 
 ### locked
-Use the `locked` function to define a locked and hidden value on the object.
-The value will never change in the future and will never be enumerated.  Since
-the lock can never be unlocked, this may have security uses, ensuring a value
-cannot be tampered with.
+Define a property with the following configuration:
 
  * Non configurable
  * Non enumerable
  * Non writeable
 
-Call Properties
----------------
-Call properties have a getter and/or setter function associated with them.
+Property Flag Functions
+-----------------------
+The property flag functions are used to update a configuration flag for an
+existing property.  Unlike the value property functions, the property value
+will not be updated and any getters or setters will be preserved.  Property
+flag functions have the following signature:
+
+```js
+/**
+ * @param {object} obj      Object on which the property will be configured.
+ * @param {string} prop     Name of property to configure.
+ * @param {boolean} [flag]  Flag value (default true)
+ */
+function(obj, prop, flag);
+```
+
+### configurable
+Set the configurable flag.  Note: it is not actually possible to set this flag
+once it has been unset, but it can be safely set any number of times before
+then.
+
+### enumerable
+Set the enumerable flag.
+
+### writeable
+Set the writeable flag.
+
+Getter/Setter Property Functions
+--------------------------------
+Some common use cases for getters and setters are made available in the
+`propertize` module.
 
 ### validated
 Use the `validated` function to define a property which will reject invalid
 updates.  When attempting to set an invalid value, the update is silently
-ignored.
+ignored.  The property will be enumerable.
 
 ```js
 var validated = require("propertize").validated,
@@ -131,7 +131,8 @@ assert(obj.foo === "Foo");
 ```
 
 ### normalized
-Use the `normalized` function to normalize values before updating.
+Use the `normalized` function to normalize values before updating.  The property
+will be enumerable.
 
 ```js
 var normalized = require("propertize").normalized,
@@ -152,7 +153,8 @@ assert(obj.foo === 42);
 ```
 
 ### derived
-Use the `derived` function to calculate a property value using a getter.
+Use the `derived` function to calculate a property value using a getter.  The
+property will not be enumerable.
 
 ```js
 var derived = require("propertize").derived,
@@ -168,7 +170,8 @@ assert(obj.name === "Muhammad Li");
 ```
 
 ### managed
-Use the `managed` function to provide a getter/setter for the property.
+Use the `managed` function to provide a getter/setter for the property.  The
+property will not be enumerable.
 
 ```js
 var managed = require("propertize").managed,
@@ -184,7 +187,7 @@ managed(obj, "id", function(val) {
 
 ### triggered
 Use the `triggered` function to have a callback invoked whenever the property
-is updated.
+is updated.  The property will not be enumerable.
 
 ```js
 var triggered = require("propertize").triggered,
@@ -196,6 +199,3 @@ triggered(obj, "foo", function(is, was) {
 });
 ```
 
-TODO
-====
- * document enumerated function
