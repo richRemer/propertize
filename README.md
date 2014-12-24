@@ -168,7 +168,8 @@ var normalized = require("propertize").normalized,
 
 // configure a "foo" property which normalizes values to int before updating.
 normalized(obj, "foo", function(val) {
-    return isNaN(parseInt(val)) ? obj.foo : parseInt(val);
+    var intVal = parseInt(val);
+    return isNaN(intVal) ? this.foo : intVal;
 });
 
 // set a string value
