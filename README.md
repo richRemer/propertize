@@ -47,14 +47,14 @@ API
 ---
 
 ### attribute
-Value function which configures property flags as follows.
+[Value function](#value-functions) which configures property flags as follows.
 
  * Non configurable
  * Enumerable
  * Non writeable
 
 ### configurable
-Flag function for updating the configurable flag.  Note: it is not actually
+[Flag function](#flag-functions) for updating the configurable flag.  Note: it is not actually
 possible to set this flag once it has been unset, but it can be safely set any
 number of times if it has not yet been unset.
 
@@ -87,31 +87,31 @@ assert(obj.name === "Muhammad Li");
 ```
 
 ### enumerable
-Flag function for updating the enumerable flag.
+[Flag function](#flag-functions) for updating the enumerable flag.
 
 ### field
-Value function which configures property flags as follows.
+[Value function](#value-functions) which configures property flags as follows.
 
  * Non configurable
  * Enumerable
  * Writeable
 
 ### hidden
-Value function which configures property flags as follows.
+[Value function](#value-functions) which configures property flags as follows.
 
  * Configurable
  * Non enumerable
  * Writeable
 
 ### internal
-Value function which configures property flags as follows.
+[Value function](#value-functions) which configures property flags as follows.
 
  * Configurable
  * Non enumerable
  * Non writeable
 
 ### locked
-Value function which configures property flags as follows.
+[Value function](#value-functions) which configures property flags as follows.
 
  * Non configurable
  * Non enumerable
@@ -182,21 +182,21 @@ assert(obj.foo === 42);
 ```
 
 ### readonly
-Value function which configures property flags as follows.
+[Value function](#value-functions) which configures property flags as follows.
 
  * Configurable
  * Enumerable
  * Non writeable
 
 ### regular
-Value function which configures property flags as follows.
+[Value function](#value-functions) which configures property flags as follows.
 
  * Configurable
  * Enumerable
  * Writeable
 
 ### setting
-Value function which configures property flags as follows.
+[Value function](#value-functions) which configures property flags as follows.
 
  * Non configurable
  * Non enumerable
@@ -264,5 +264,5 @@ assert(obj.foo === "Foo");
 ```
 
 ### writeable
-Flag function for updating the writable flag.
+[Flag function](#flag-functions) for updating the writable flag.
 
