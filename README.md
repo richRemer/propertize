@@ -1,75 +1,24 @@
 propertize Module
 =================
 The propertize module exposes semantically named wrappers for the ECMAScript
-standard `Object.defineProperty` function.  The `propertize` functions are
-broken up into three categories: **value**, **flag**, and **get/set**.
+standard `Object.defineProperty` function.
 
-#### Value Functions
-Each value function is defined to set all descriptor flags (`configurable`,
-`enumerable`, `writable`), wipe any `get` or `set` functions, and optionally
-update the `value`.  Each of the functions (`attribute`, `field`, `hidden`,
-`internal`, `locked`, `readonly`, `regular`, and `setting`) has the same
-signature, differing only in the values set for the descriptor flags.
+Module Functions
+----------------
 
-```js
-/**
- * Common function signature for value functions.
- * @param {object} obj  Object on which the property will be defined.
- * @param {string} prop Name of property to define.
- * @param {*} [val]     New value for property (defaults to existing value).
- */
-function(obj, prop, val);
-```
+#### attribute(obj, prop, [val])
+Define an enumerable, non-configurable, non-writable property on an object.  If
+no value is provided, use the existing value.  Clear any getter or setter.
 
-#### Flag Functions
-Each flag function updates a single descriptor flag after which it is named
-(`configurable`, `enumerable`, `writable`).  All other descriptors are
-preserved, including get/set functions, value, and other flags.  Each of these
-functions has the same signature.
+#### configurable(obj, prop, [flag])
+Add or update the configurable descriptor for an object property.  If no flag
+is provided, default to true.  Note: it is not possible to set this flag to
+true once it has been set to false.  This is by design.  Once a property's
+configuration has been removed, it cannot be undone.
 
-```js
-/**
- * Common function signature for flag functions.
- * @param {object} obj      Object on which the property will be configured.
- * @param {string} prop     Name of property to configure.
- * @param {boolean} [flag]  Flag value (default true)
- */
-function(obj, prop, flag);
-```
-
-#### Get/Set Functions
-Each get/set function is intended to solve a typical use case for using getters
-and setters.  Each has a different signature described below.  The functions in
-this group are `derived`, `managed`, `normalized`, `triggered`, and
-`validated`.
-
-API
----
-
-### attribute
-[Value function](#value-functions) which configures property flags as follows.
-
- * Non configurable
- * Enumerable
- * Non writeable
-
-### configurable
-[Flag function](#flag-functions) for updating the configurable flag.  Note: it is not actually
-possible to set this flag once it has been unset, but it can be safely set any
-number of times if it has not yet been unset.
-
-### derived
-Define a property which is derived, either from other object properties or
-another source.  The property will be made non-enumerable.
-
-```js
-/**
- * @param {object} obj
- * @param {string} prop
- * @param {function} derive
- */
-function derived(obj, prop, derive);
-```
+#### derived(obj, prop, derive)
+Define a non-enumerable property with a getter used to derive the value.  The
+derive function's scope will be set to the object.
 
 **Example**
 
@@ -86,50 +35,29 @@ derived(obj, "name", function() {
 assert(obj.name === "Muhammad Li");
 ```
 
-### enumerable
-[Flag function](#flag-functions) for updating the enumerable flag.
+#### enumerable(obj, prop, [flag])
+Add or update the enumerable descriptor for an object property.  If no flag
+is provided, default to true.
 
-### field
-[Value function](#value-functions) which configures property flags as follows.
+#### field(obj, prop, [val])
+Define an enumerable, writable, non-configurable property on an object.  If no
+value is provided, use the existing value.  Clear any getter or setter.
 
- * Non configurable
- * Enumerable
- * Writeable
+#### hidden(obj, prop, [val])
+Define a configurable, writable, non-enumerable property on an object.  If no
+value is provided, use the existing value.  Clear any getter or setter.
 
-### hidden
-[Value function](#value-functions) which configures property flags as follows.
+#### internal(obj, prop, [val])
+Define a configurable, non-enumerable, non-writable property on an object.  If
+no value is provided, use the existing value.  Clear any getter or setter.
 
- * Configurable
- * Non enumerable
- * Writeable
+#### locked(obj, prop, [val])
+Define a non-configurable, non-enumerable, non-writable property on an object.
+If no value is provided, use the existing value.  Clear any getter or setter.
 
-### internal
-[Value function](#value-functions) which configures property flags as follows.
-
- * Configurable
- * Non enumerable
- * Non writeable
-
-### locked
-[Value function](#value-functions) which configures property flags as follows.
-
- * Non configurable
- * Non enumerable
- * Non writeable
-
-### managed
-Define a property managed by a getter and setter.  The property will be made
-non-enumerable.
-
-```js
-/**
- * @param {object} obj
- * @param {string} prop
- * @param {function} set
- * @param {function} get
- */
-function managed(obj, prop, set, get);
-```
+#### managed(obj, prop, set, get)
+Define a non-enumerable property with a getter and setter.  The set and get
+functions' scopes will be set to the object.
 
 **Example**
 
@@ -145,20 +73,10 @@ managed(obj, "id", function(val) {
 });
 ```
 
-### normalized
-Define a property which normalizes values to a particular form before updating.
-If an optional value is passed, the value will be set without any
-normalization.  The property will be made enumerable.
-
-```js
-/**
- * @param {object} obj
- * @param {string} prop
- * @param {*} [val]
- * @param {function} normalizer
- */
-function normalized(obj, prop, val, normalizer);
-```
+#### normalized(obj, prop, [val], normalize)
+Define an enumerable property with a setter which normalizes values to a
+particular form before updating.  If an optional value is passed, the value
+will skip normalization.
 
 **Example**
 
@@ -181,39 +99,21 @@ obj.foo = 42.24;
 assert(obj.foo === 42);
 ```
 
-### readonly
-[Value function](#value-functions) which configures property flags as follows.
+#### readonly(obj, prop, [val])
+Define a configurable, enumerable, non-writable property on an object.  If no
+value is provided, use the existing value.  Clear any getter or setter.
 
- * Configurable
- * Enumerable
- * Non writeable
+#### regular(obj, prop, [val])
+Define a configurable, enumerable, writable property on an object.  If no value
+is provided, use the existing value.  Clear any getter or setter.
 
-### regular
-[Value function](#value-functions) which configures property flags as follows.
+#### setting(obj, prop, [val])
+Define a writable, non-configurable, non-enumerable property on an object.  If
+no value is provided, use the existing value.  Clear any getter or setter.
 
- * Configurable
- * Enumerable
- * Writeable
-
-### setting
-[Value function](#value-functions) which configures property flags as follows.
-
- * Non configurable
- * Non enumerable
- * Writeable
-
-### triggered
-Define a property which triggers a callback whenever the property is updated.
-The property will be made non-enumerable.
-
-```js
-/**
- * @param {object} obj
- * @param {string} prop
- * @param {function} change
- */
-function triggered(obj, prop, change);
-```
+#### triggered(obj, prop, trigger)
+Define a non-enumerable property which triggers a callback whenever the
+property is set.
 
 **Example**
 
@@ -227,21 +127,10 @@ triggered(obj, "foo", function(is, was) {
 });
 ```
 
-### validated
-Define a property which will reject invalid updates.  When attempting to set an
-invalid value, the update is silently ignored.  If an optional value is passed,
-the value will be set without any validation.  The property will be made
-enumerable.
-
-```js
-/**
- * @param {object} obj
- * @param {string} prop
- * @param {*} [val]
- * @param {function} validator
- */
-function validated(obj, prop, val, validator);
-```
+#### validated(obj, prop, [val], validate)
+Define an enumerable property which rejects invalid updates.  When attempting
+to set an invalid value, the update is silently ignored.  If an optional value
+is passed, this initial value will be set without any validation.
 
 **Example**
 
@@ -263,6 +152,26 @@ obj.foo = 42;
 assert(obj.foo === "Foo");
 ```
 
-### writeable
-[Flag function](#flag-functions) for updating the writable flag.
+#### writeable(obj, prop, [flag])
+Add or update the writable descriptor for an object property.  If no flag is
+provided, default to true.
+
+Future
+------
+Non-breaking changes scheduled for version 2.x
+ * deprecate and replace `regular` with `default`/`standard`
+ * `value` to set value (better way to bypass readonly, et al)
+ * `getter` to change property getter
+ * `setter` to change property setter
+
+Breaking changes scheduled for version 3.0.
+ * remove deprecated `regular` function
+ * ensure getter/setter functions work together
+   * `validated` can safely layer over existing getter/setter
+   * `triggered` can safely layer over existing getter/setter
+   * `normalized` can safely layer over existing getter/setter
+   * `managed` wipes existing getter/setter
+   * `derived` wipes existing getter/setter
+   * how do you replace the existing getter/setter in this case?
+     * `default`/`regular`/`standard`/`managed`/`derived`
 
