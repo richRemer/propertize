@@ -47,6 +47,9 @@ is provided, default to true.
 Define an enumerable, writable, non-configurable property on an object.  If no
 value is provided, use the existing value.  Clear any getter or setter.
 
+### get(obj, prop, getter)
+Update an object property getter.
+
 #### hidden(obj, prop, [val])
 Define a configurable, writable, non-enumerable property on an object.  If no
 value is provided, use the existing value.  Clear any getter or setter.
@@ -112,6 +115,9 @@ Define a configurable, enumerable, writable property on an object.  If no value
 is provided, use the existing value.  Clear any getter or setter.  This
 function is deprecated.  Use `basic` instead.
 
+### set(obj, prop, setter)
+Update an object property setter.
+
 #### setting(obj, prop, [val])
 Define a writable, non-configurable, non-enumerable property on an object.  If
 no value is provided, use the existing value.  Clear any getter or setter.
@@ -167,10 +173,6 @@ provided, default to true.
 
 Future
 ------
-Non-breaking changes scheduled for version 2.x
- * `getter` to change property getter
- * `setter` to change property setter
-
 Breaking changes scheduled for version 3.0.
  * remove deprecated `regular` function
  * ensure getter/setter functions work together

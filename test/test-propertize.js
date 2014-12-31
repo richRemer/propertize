@@ -193,6 +193,44 @@ describe("propertize", function() {
         });
     });
     
+    describe(".get", function() {
+        it("should update getter", function() {
+            var obj = {},
+                val = 42;
+
+            prop.managed(obj, "foo",
+                function(newval) {val = newval;},
+                function() {return val;}
+            );
+            expect(obj.foo).to.be(42);
+
+            prop.get(obj, "foo", function() {return val*2;});
+            expect(obj.foo).to.be(84);
+
+            obj.foo = 23;
+            expect(obj.foo).to.be(46);
+        });
+    });
+    
+    describe(".set", function() {
+        it("should update setter", function() {
+            var obj = {},
+                val = 42;
+
+            prop.managed(obj, "foo",
+                function(newval) {val = newval;},
+                function() {return val;}
+            );
+            expect(obj.foo).to.be(42);
+
+            prop.set(obj, "foo", function(newval) {val = newval*2;});
+            expect(obj.foo).to.be(42);
+
+            obj.foo = 23;
+            expect(obj.foo).to.be(46);
+        });
+    });
+
     describe(".validated", function() {
         it("should add a new property", function() {
             var obj = {};

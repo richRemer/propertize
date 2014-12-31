@@ -226,6 +226,54 @@ function writable(obj, prop, writable) {
 }
 
 /**
+ * Update the configuration for an object property, setting the getter.
+ * @param {object} obj
+ * @param {string} prop
+ * @param {function} getter
+ */
+function get(obj, prop, getter) {
+    var desc = Object.getOwnPropertyDescriptor(obj, prop);
+    
+    // if property defined, update get in descriptor
+    if (desc) desc.get = getter;
+
+    // otherwise create new descriptor
+    else desc = {
+        configurable: true,
+        enumerable: true,
+        get: getter,
+        set: undefined
+    };
+
+    // define property
+    Object.defineProperty(obj, prop, desc);
+}
+
+/**
+ * Update the configuration for an object property, setting the setter.
+ * @param {object} obj
+ * @param {string} prop
+ * @param {function} setter
+ */
+function set(obj, prop, setter) {
+    var desc = Object.getOwnPropertyDescriptor(obj, prop);
+    
+    // if property defined, update set in descriptor
+    if (desc) desc.set = setter;
+
+    // otherwise create new descriptor
+    else desc = {
+        configurable: true,
+        enumerable: true,
+        get: undefined,
+        set: setter
+    };
+
+    // define property
+    Object.defineProperty(obj, prop, desc);
+}
+
+/**
  * Configure a validated property on an object which will ignore updates for
  * values which return a non-true value when passed to a validator function.
  * @param {object} obj
@@ -329,10 +377,11 @@ module.exports = {
     setting: setting,
 
     value: value,
-
     configurable: configurable,
     enumerable: enumerable,
     writable: writable,
+    get: get,
+    set: set,
     
     derived: derived,
     managed: managed,
