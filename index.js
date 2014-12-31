@@ -138,6 +138,29 @@ function locked(obj, prop, val) {
 }
 
 /**
+ * Update an object property value, resetting any get/set and bypassing
+ * non-writable descriptor.
+ * @param {object} obj
+ * @param {string} prop
+ * @param {*} val
+ */
+function value(obj, prop, val) {
+    var desc = Object.getOwnPropertyDescriptor(obj, prop);
+    
+    // if property is already defined, remove get/set and update value
+    if (desc) {
+        desc.value = val;
+        if (desc.get && !desc.set) desc.writable = false;
+        delete desc.get;
+        delete desc.set;
+        Object.defineProperty(obj, prop, desc);
+    }
+
+    // just set the property value to get a basic property
+    else obj[prop] = val;
+}
+
+/**
  * Update the configuration for an object property, setting the configurable
  * flag (default to true).  In practice, the flag cannot be set to true once set
  * to false, but it may be set to true any number of times before being set to
@@ -304,6 +327,8 @@ module.exports = {
     readonly: readonly,
     regular: basic,         // deprecated alias
     setting: setting,
+
+    value: value,
 
     configurable: configurable,
     enumerable: enumerable,

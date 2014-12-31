@@ -120,6 +120,21 @@ describe("propertize", function() {
         it("should prevent writing to the property", testNoWrite("locked"));
     });
 
+    describe(".value", function() {
+        it("should add a new property", testAdd("value"));
+        
+        it("should update an existing property", testUpdate("value"));
+
+        it("should preserve descriptors while changing value", function() {
+            var o = {};
+            prop.readonly(o, "foo", 42);
+
+            o.foo = 23;                 expect(o.foo).to.be(42); // rejected
+            prop.value(o, "foo", 23);   expect(o.foo).to.be(23); // bypass
+            o.foo = 42;                 expect(o.foo).to.be(23); // rejected
+        });
+    });    
+
     describe(".configurable", function() {
         it("should update existing property configurable flag", function() {
             var obj = {},

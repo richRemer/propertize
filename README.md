@@ -157,6 +157,10 @@ obj.foo = 42;
 assert(obj.foo === "Foo");
 ```
 
+### value(obj, prop, val)
+Update an object property value, even if it's non-writable.  Remove any get/set
+defined for the property.
+
 #### writeable(obj, prop, [flag])
 Add or update the writable descriptor for an object property.  If no flag is
 provided, default to true.
@@ -164,7 +168,6 @@ provided, default to true.
 Future
 ------
 Non-breaking changes scheduled for version 2.x
- * `value` to set value (better way to bypass readonly, et al)
  * `getter` to change property getter
  * `setter` to change property setter
 
