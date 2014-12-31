@@ -366,6 +366,13 @@ function triggered(obj, prop, change) {
 
 /** export propertize functions */
 module.exports = {
+    value: value,
+    configurable: configurable,
+    enumerable: enumerable,
+    writable: writable,
+    get: get,
+    set: set,
+    
     attribute: attribute,
     basic: basic,
     field: field,
@@ -376,13 +383,6 @@ module.exports = {
     regular: basic,         // deprecated alias
     setting: setting,
 
-    value: value,
-    configurable: configurable,
-    enumerable: enumerable,
-    writable: writable,
-    get: get,
-    set: set,
-    
     derived: derived,
     managed: managed,
     normalized: normalized,
