@@ -1,5 +1,5 @@
 /**
- * Configure a regular property.  The property will be configurable, enumerable,
+ * Configure a basic property.  The property will be configurable, enumerable,
  * and writable.  If no value is provided, the current value will be used.
  * This function can be useful after you've already configured a property and
  * wish it to return back to normal behavior.
@@ -7,7 +7,7 @@
  * @param {string} prop
  * @param {*} [val]
  */
-function regular(obj, prop, val) {
+function basic(obj, prop, val) {
     if (arguments.length < 3) val = obj[prop];
     Object.defineProperty(obj, prop, {
         configurable: true,
@@ -296,12 +296,13 @@ function triggered(obj, prop, change) {
 /** export propertize functions */
 module.exports = {
     attribute: attribute,
+    basic: basic,
     field: field,
     hidden: hidden,
     internal: internal,
     locked: locked,
     readonly: readonly,
-    regular: regular,
+    regular: basic,         // deprecated alias
     setting: setting,
 
     configurable: configurable,

@@ -10,6 +10,10 @@ Module Functions
 Define an enumerable, non-configurable, non-writable property on an object.  If
 no value is provided, use the existing value.  Clear any getter or setter.
 
+#### basic(obj, prop, [val])
+Define a configurable, enumerable, writable property on an object.  If no value
+is provided, use the existing value.  Clear any getter or setter.
+
 #### configurable(obj, prop, [flag])
 Add or update the configurable descriptor for an object property.  If no flag
 is provided, default to true.  Note: it is not possible to set this flag to
@@ -103,9 +107,10 @@ assert(obj.foo === 42);
 Define a configurable, enumerable, non-writable property on an object.  If no
 value is provided, use the existing value.  Clear any getter or setter.
 
-#### regular(obj, prop, [val])
+#### [DEPRECATED] regular(obj, prop, [val])
 Define a configurable, enumerable, writable property on an object.  If no value
-is provided, use the existing value.  Clear any getter or setter.
+is provided, use the existing value.  Clear any getter or setter.  This
+function is deprecated.  Use `basic` instead.
 
 #### setting(obj, prop, [val])
 Define a writable, non-configurable, non-enumerable property on an object.  If
@@ -159,7 +164,6 @@ provided, default to true.
 Future
 ------
 Non-breaking changes scheduled for version 2.x
- * deprecate and replace `regular` with `default`/`standard`
  * `value` to set value (better way to bypass readonly, et al)
  * `getter` to change property getter
  * `setter` to change property setter
@@ -173,5 +177,5 @@ Breaking changes scheduled for version 3.0.
    * `managed` wipes existing getter/setter
    * `derived` wipes existing getter/setter
    * how do you replace the existing getter/setter in this case?
-     * `default`/`regular`/`standard`/`managed`/`derived`
+     * `basic`/`managed`/`derived`
 

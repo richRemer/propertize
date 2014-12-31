@@ -48,6 +48,12 @@ describe("propertize", function() {
         };
     }
 
+    describe(".basic", function() {
+        it("should add a new property", testAdd("basic"));
+        
+        it("should update an existing property", testUpdate("basic"));
+    });
+
     describe(".field", function() {
         it("should add a new property", testAdd("field"));
         
