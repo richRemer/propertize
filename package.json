@@ -1,6 +1,6 @@
 {
   "name": "propertize",
-  "version": "2.1.0",
+  "version": "2.1.1",
   "description": "Semantically named function wrappers for Object.defineProperty",
   "main": "propertize.js",
   "scripts": {

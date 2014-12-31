@@ -47,7 +47,7 @@ is provided, default to true.
 Define an enumerable, writable, non-configurable property on an object.  If no
 value is provided, use the existing value.  Clear any getter or setter.
 
-### get(obj, prop, getter)
+#### get(obj, prop, getter)
 Update an object property getter.
 
 #### hidden(obj, prop, [val])
@@ -115,7 +115,7 @@ Define a configurable, enumerable, writable property on an object.  If no value
 is provided, use the existing value.  Clear any getter or setter.  This
 function is deprecated.  Use `basic` instead.
 
-### set(obj, prop, setter)
+#### set(obj, prop, setter)
 Update an object property setter.
 
 #### setting(obj, prop, [val])
@@ -163,7 +163,7 @@ obj.foo = 42;
 assert(obj.foo === "Foo");
 ```
 
-### value(obj, prop, val)
+#### value(obj, prop, val)
 Update an object property value, even if it's non-writable.  Remove any get/set
 defined for the property.
 
