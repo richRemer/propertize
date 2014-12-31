@@ -3,8 +3,36 @@ propertize Module
 The propertize module exposes semantically named wrappers for the ECMAScript
 standard `Object.defineProperty` function.
 
-Module Functions
-----------------
+API Overview
+------------
+
+Update a single property descriptor
+ * **value**: set value
+ * **configurable**: set configurable/non-configurable
+ * **enumerable**: set enumerable/non-enumerable
+ * **writable**: set writable/non-writable
+ * **get**: define get
+ * **set**: define set
+
+Update all property descriptors
+ * **attribute**: set enumerable, non-configurable, non-writable; set value; wipe get/set
+ * **basic**: set configurable, enumerable, writable; set value; wipe get/set
+ * **field**: set enumerable, writable, non-configurable; set value; wipe get/set
+ * **hidden**: set configurable, writable, non-enumerable; set value; wipe get/set
+ * **internal**: set configurable, non-enumerable, non-writable; set value; wipe get/set
+ * **locked**: set non-configurable, non-enumerable, non-writable; set value; wipe get/set
+ * **readonly**: set configurable, enumerable, non-writable; set value; wipe get/set
+ * **setting**: set writable, non-configurable, non-enumerable; set value; wipe get/set
+
+Common use cases for getters/setters 
+ * **derived**: set non-enumerable; define get; wipe set
+ * **managed**: set non-enumerable; define get/set
+ * **normalized**: set enumerable; define set; wipe get
+ * **triggered**: set non-enumerable; define set; wipe get
+ * **validated**: set enumerable; define set; wipe get
+
+API Documentation
+-----------------
 
 #### attribute(obj, prop, [val])
 Define an enumerable, non-configurable, non-writable property on an object.  If
