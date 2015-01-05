@@ -27,9 +27,9 @@ Update all property descriptors
 Common use cases for getters/setters 
  * **derived**: set non-enumerable; define get; wipe set
  * **managed**: set non-enumerable; define get/set
- * **normalized**: set enumerable; define set; wipe get
- * **triggered**: set non-enumerable; define set; wipe get
- * **validated**: set enumerable; define set; wipe get
+ * **normalized**: set enumerable; define get/set
+ * **triggered**: set non-enumerable; define get/set
+ * **validated**: set enumerable; define get/set
 
 API Documentation
 -----------------
