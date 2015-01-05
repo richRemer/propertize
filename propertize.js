@@ -1,141 +1,6 @@
-/**
- * Configure a basic property.  The property will be configurable, enumerable,
- * and writable.  If no value is provided, the current value will be used.
- * This function can be useful after you've already configured a property and
- * wish it to return back to normal behavior.
- * @param {object} obj
- * @param {string} prop
- * @param {*} [val]
- */
-function basic(obj, prop, val) {
-    if (arguments.length < 3) val = obj[prop];
-    Object.defineProperty(obj, prop, {
-        configurable: true,
-        enumerable: true,
-        writable: true,
-        value: val
-    });
-}
-
-/**
- * Configure a field property on an object which will not be configurable.  If
- * no value if provided, the current value will be used.
- * @param {object} obj
- * @param {string} prop
- * @param {*} [val]
- */
-function field(obj, prop, val) {
-    if (arguments.length < 3) val = obj[prop];
-    Object.defineProperty(obj, prop, {
-        configurable: false,
-        enumerable: true,
-        writable: true,
-        value: val
-    });
-}
-
-/**
- * Configure a hidden property on an object which will not be enumerable.  If
- * no value if provided, the current value will be used.
- * @param {object} obj
- * @param {string} prop
- * @param {*} [val]
- */
-function hidden(obj, prop, val) {
-    if (arguments.length < 3) val = obj[prop];
-    Object.defineProperty(obj, prop, {
-        configurable: true,
-        enumerable: false,
-        writable: true,
-        value: val
-    });
-} 
-
-/**
- * Configure a read-only property on an object which will not be writable.  If
- * no value is provided, the current value will be used.
- * @param {object} obj
- * @param {string} prop
- * @param {*} [val]
- */
-function readonly(obj, prop, val) {
-    if (arguments.length < 3) val = obj[prop];
-    Object.defineProperty(obj, prop, {
-        configurable: true,
-        enumerable: true,
-        writable: false,
-        value: val
-    });
-}
-
-/**
- * Configure an internal property on an object which will not be enumerable or
- * writable.  If no value is provided, the current value will be used.
- * @param {object} obj
- * @param {string} prop
- * @param {*} [val]
- */
-function internal(obj, prop, val) {
-    if (arguments.length < 3) val = obj[prop];
-    Object.defineProperty(obj, prop, {
-        configurable: true,
-        enumerable: false,
-        writable: false,
-        value: val
-    });
-}
-
-/**
- * Configure an attribute property on an object which will not be configurable
- * or writable.  If no value is provided, the current value will be used.
- * @param {object} obj
- * @param {string} prop
- * @param {*} [val]
- */
-function attribute(obj, prop, val) {
-    if (arguments.length < 3) val = obj[prop];
-    Object.defineProperty(obj, prop, {
-        configurable: false,
-        enumerable: true,
-        writable: false,
-        value: val
-    });
-}
-
-/**
- * Configure a setting property on an object which will not be configurable or
- * enumerable.  If no value is provided, the current value will be used.
- * @param {object} obj
- * @param {string} prop
- * @param {*} [val]
- */
-function setting(obj, prop, val) {
-    if (arguments.length < 3) val = obj[prop];
-    Object.defineProperty(obj, prop, {
-        configurable: false,
-        enumerable: false,
-        writable: true,
-        value: val
-    });
-} 
-
-/**
- * Configure a locked property on an object which will not be configurable,
- * enumerable, or writable.  If no value is provided, the current value will be
- * used.
- * @param {object} obj
- * @param {string} prop
- * @param {*} [val]
- */
-function locked(obj, prop, val) {
-    if (arguments.length < 3) val = obj[prop];
-    Object.defineProperty(obj, prop, {
-        configurable: false,
-        enumerable: false,
-        writable: false,
-        value: val
-    });
-}
+///////////////////////////////////////////////////////
+// functions which update a single property descriptor
+///////////////////////////////////////////////////////
 
 /**
  * Update an object property value, resetting any get/set and bypassing
@@ -226,30 +91,6 @@ function writable(obj, prop, writable) {
 }
 
 /**
- * Update the configuration for an object property, setting the getter.
- * @param {object} obj
- * @param {string} prop
- * @param {function} getter
- */
-function get(obj, prop, getter) {
-    var desc = Object.getOwnPropertyDescriptor(obj, prop);
-    
-    // if property defined, update get in descriptor
-    if (desc) desc.get = getter;
-
-    // otherwise create new descriptor
-    else desc = {
-        configurable: true,
-        enumerable: true,
-        get: getter,
-        set: undefined
-    };
-
-    // define property
-    Object.defineProperty(obj, prop, desc);
-}
-
-/**
  * Update the configuration for an object property, setting the setter.
  * @param {object} obj
  * @param {string} prop
@@ -274,42 +115,175 @@ function set(obj, prop, setter) {
 }
 
 /**
- * Configure a validated property on an object which will ignore updates for
- * values which return a non-true value when passed to a validator function.
+ * Update the configuration for an object property, setting the getter.
+ * @param {object} obj
+ * @param {string} prop
+ * @param {function} getter
+ */
+function get(obj, prop, getter) {
+    var desc = Object.getOwnPropertyDescriptor(obj, prop);
+    
+    // if property defined, update get in descriptor
+    if (desc) desc.get = getter;
+
+    // otherwise create new descriptor
+    else desc = {
+        configurable: true,
+        enumerable: true,
+        get: getter,
+        set: undefined
+    };
+
+    // define property
+    Object.defineProperty(obj, prop, desc);
+}
+
+///////////////////////////////////////////////////////
+// functions which update all property descriptors
+///////////////////////////////////////////////////////
+
+/**
+ * Configure an attribute property on an object which will not be configurable
+ * or writable.  If no value is provided, the current value will be used.
  * @param {object} obj
  * @param {string} prop
  * @param {*} [val]
- * @param {function} validator
  */
-function validated(obj, prop, val, validator) {
-    if (arguments.length < 4) validator = val, val = obj[prop];
+function attribute(obj, prop, val) {
+    if (arguments.length < 3) val = obj[prop];
     Object.defineProperty(obj, prop, {
-        configurable: true,
+        configurable: false,
         enumerable: true,
-        get: function() {return val;},
-        set: function(newval) {
-            if (validator(newval) === true) val = newval;
-        }
+        writable: false,
+        value: val
     });
 }
 
 /**
- * Configure a normalized property on an object which passes a value through a
- * normalizer function before updating.
+ * Configure a basic property.  The property will be configurable, enumerable,
+ * and writable.  If no value is provided, the current value will be used.
+ * This function can be useful after you've already configured a property and
+ * wish it to return back to normal behavior.
  * @param {object} obj
  * @param {string} prop
  * @param {*} [val]
- * @param {function} normalizer
  */
-function normalized(obj, prop, val, normalizer) {
-    if (arguments.length < 4) normalizer = val, val = obj[prop];
+function basic(obj, prop, val) {
+    if (arguments.length < 3) val = obj[prop];
     Object.defineProperty(obj, prop, {
         configurable: true,
         enumerable: true,
-        get: function() {return val;},
-        set: function(newval) {val = normalizer(newval);}
+        writable: true,
+        value: val
     });
 }
+
+/**
+ * Configure a field property on an object which will not be configurable.  If
+ * no value if provided, the current value will be used.
+ * @param {object} obj
+ * @param {string} prop
+ * @param {*} [val]
+ */
+function field(obj, prop, val) {
+    if (arguments.length < 3) val = obj[prop];
+    Object.defineProperty(obj, prop, {
+        configurable: false,
+        enumerable: true,
+        writable: true,
+        value: val
+    });
+}
+
+/**
+ * Configure a hidden property on an object which will not be enumerable.  If
+ * no value if provided, the current value will be used.
+ * @param {object} obj
+ * @param {string} prop
+ * @param {*} [val]
+ */
+function hidden(obj, prop, val) {
+    if (arguments.length < 3) val = obj[prop];
+    Object.defineProperty(obj, prop, {
+        configurable: true,
+        enumerable: false,
+        writable: true,
+        value: val
+    });
+} 
+
+/**
+ * Configure an internal property on an object which will not be enumerable or
+ * writable.  If no value is provided, the current value will be used.
+ * @param {object} obj
+ * @param {string} prop
+ * @param {*} [val]
+ */
+function internal(obj, prop, val) {
+    if (arguments.length < 3) val = obj[prop];
+    Object.defineProperty(obj, prop, {
+        configurable: true,
+        enumerable: false,
+        writable: false,
+        value: val
+    });
+}
+
+/**
+ * Configure a locked property on an object which will not be configurable,
+ * enumerable, or writable.  If no value is provided, the current value will be
+ * used.
+ * @param {object} obj
+ * @param {string} prop
+ * @param {*} [val]
+ */
+function locked(obj, prop, val) {
+    if (arguments.length < 3) val = obj[prop];
+    Object.defineProperty(obj, prop, {
+        configurable: false,
+        enumerable: false,
+        writable: false,
+        value: val
+    });
+}
+
+/**
+ * Configure a read-only property on an object which will not be writable.  If
+ * no value is provided, the current value will be used.
+ * @param {object} obj
+ * @param {string} prop
+ * @param {*} [val]
+ */
+function readonly(obj, prop, val) {
+    if (arguments.length < 3) val = obj[prop];
+    Object.defineProperty(obj, prop, {
+        configurable: true,
+        enumerable: true,
+        writable: false,
+        value: val
+    });
+}
+
+/**
+ * Configure a setting property on an object which will not be configurable or
+ * enumerable.  If no value is provided, the current value will be used.
+ * @param {object} obj
+ * @param {string} prop
+ * @param {*} [val]
+ */
+function setting(obj, prop, val) {
+    if (arguments.length < 3) val = obj[prop];
+    Object.defineProperty(obj, prop, {
+        configurable: false,
+        enumerable: false,
+        writable: true,
+        value: val
+    });
+} 
+
+///////////////////////////////////////////////////////
+// functions which define get/set for common cases
+///////////////////////////////////////////////////////
 
 /**
  * Configure a derived property on an object which is read-only and whose value
@@ -344,6 +318,24 @@ function managed(obj, prop, set, get) {
 }
 
 /**
+ * Configure a normalized property on an object which passes a value through a
+ * normalizer function before updating.
+ * @param {object} obj
+ * @param {string} prop
+ * @param {*} [val]
+ * @param {function} normalizer
+ */
+function normalized(obj, prop, val, normalizer) {
+    if (arguments.length < 4) normalizer = val, val = obj[prop];
+    Object.defineProperty(obj, prop, {
+        configurable: true,
+        enumerable: true,
+        get: function() {return val;},
+        set: function(newval) {val = normalizer(newval);}
+    });
+}
+
+/**
  * Configure a property on an object which triggers a callback when changed.
  * @param {object} obj
  * @param {string} prop
@@ -364,14 +356,34 @@ function triggered(obj, prop, change) {
     });
 }
 
+/**
+ * Configure a validated property on an object which will ignore updates for
+ * values which return a non-true value when passed to a validator function.
+ * @param {object} obj
+ * @param {string} prop
+ * @param {*} [val]
+ * @param {function} validator
+ */
+function validated(obj, prop, val, validator) {
+    if (arguments.length < 4) validator = val, val = obj[prop];
+    Object.defineProperty(obj, prop, {
+        configurable: true,
+        enumerable: true,
+        get: function() {return val;},
+        set: function(newval) {
+            if (validator(newval) === true) val = newval;
+        }
+    });
+}
+
 /** export propertize functions */
 module.exports = {
     value: value,
     configurable: configurable,
     enumerable: enumerable,
     writable: writable,
-    get: get,
     set: set,
+    get: get,
     
     attribute: attribute,
     basic: basic,
