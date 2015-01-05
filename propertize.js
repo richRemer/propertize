@@ -325,13 +325,13 @@ function managed(obj, prop, set, get) {
  * @param {*} [val]
  * @param {function} normalizer
  */
-function normalized(obj, prop, val, normalizer) {
-    if (arguments.length < 4) normalizer = val, val = obj[prop];
+function normalized(obj, prop, val, normalize) {
+    if (arguments.length < 4) normalize = val, val = obj[prop];
     Object.defineProperty(obj, prop, {
         configurable: true,
         enumerable: true,
         get: function() {return val;},
-        set: function(newval) {val = normalizer(newval);}
+        set: function(newval) {val = normalize(newval);}
     });
 }
 
@@ -341,7 +341,7 @@ function normalized(obj, prop, val, normalizer) {
  * @param {string} prop
  * @param {function} change
  */
-function triggered(obj, prop, change) {
+function triggered(obj, prop, trigger) {
     var val = obj[prop];
 
     Object.defineProperty(obj, prop, {
@@ -350,7 +350,7 @@ function triggered(obj, prop, change) {
         set: function(newval) {
             var oldval = val;
             val = newval;
-            change.call(obj, newval, oldval);
+            trigger.call(obj, newval, oldval);
         },
         get: function() {return val;}
     });
@@ -364,14 +364,14 @@ function triggered(obj, prop, change) {
  * @param {*} [val]
  * @param {function} validator
  */
-function validated(obj, prop, val, validator) {
-    if (arguments.length < 4) validator = val, val = obj[prop];
+function validated(obj, prop, val, validate) {
+    if (arguments.length < 4) validate = val, val = obj[prop];
     Object.defineProperty(obj, prop, {
         configurable: true,
         enumerable: true,
         get: function() {return val;},
         set: function(newval) {
-            if (validator(newval) === true) val = newval;
+            if (validate(newval) === true) val = newval;
         }
     });
 }
