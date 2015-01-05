@@ -138,11 +138,6 @@ assert(obj.foo === 42);
 Define a configurable, enumerable, non-writable property on an object.  If no
 value is provided, use the existing value.  Clear any getter or setter.
 
-#### [DEPRECATED] regular(obj, prop, [val])
-Define a configurable, enumerable, writable property on an object.  If no value
-is provided, use the existing value.  Clear any getter or setter.  This
-function is deprecated.  Use `basic` instead.
-
 #### set(obj, prop, setter)
 Update an object property setter.
 
@@ -202,7 +197,6 @@ provided, default to true.
 Future
 ------
 Breaking changes scheduled for version 3.0.
- * remove deprecated `regular` function
  * ensure getter/setter functions work together
    * `validated` can safely layer over existing getter/setter
    * `triggered` can safely layer over existing getter/setter

@@ -380,7 +380,6 @@ module.exports = {
     internal: internal,
     locked: locked,
     readonly: readonly,
-    regular: basic,         // deprecated alias
     setting: setting,
 
     derived: derived,
