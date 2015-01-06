@@ -190,7 +190,7 @@ assert(obj.foo === "Foo");
 Update an object property value, even if it's non-writable.  Remove any get/set
 defined for the property.
 
-#### writeable(obj, prop, [flag])
+#### writable(obj, prop, [flag])
 Add or update the writable descriptor for an object property.  If no flag is
 provided, default to true.
 
