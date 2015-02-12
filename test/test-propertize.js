@@ -252,6 +252,19 @@ describe("propertize", function() {
             obj.foo = "FOO";
             expect(obj.val).to.be(undefined);
         });
+
+        it("should execute validator with object context", function() {
+            var obj = {foo: false};
+            prop.validated(obj, "bar", false, function(val) {
+                return this.foo === true;
+            });
+
+            obj.bar = 42;
+            expect(obj.bar).to.be(false);
+            obj.foo = true;
+            obj.bar = 42;
+            expect(obj.bar).to.be(42);
+        });
     });
     
     describe(".normalized", function() {
@@ -274,6 +287,19 @@ describe("propertize", function() {
             });
             obj.foo = "FOO";
             expect(obj.foo).to.be("foo");
+        });
+
+        it("should execute normalizer with object context", function() {
+            var obj = {foo: "A"};
+            prop.normalized(obj, "bar", function(val) {
+                return this.foo + val;
+            });
+
+            obj.bar = "biff";
+            expect(obj.bar).to.be("Abiff");
+            obj.foo = "B";
+            obj.bar = "biff";
+            expect(obj.bar).to.be("Bbiff");
         });
     });
     

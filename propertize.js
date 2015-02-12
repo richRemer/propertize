@@ -288,7 +288,7 @@ function validated(obj, prop, val, validator) {
         enumerable: true,
         get: function() {return val;},
         set: function(newval) {
-            if (validator(newval) === true) val = newval;
+            if (validator.call(this, newval) === true) val = newval;
         }
     });
 }
@@ -307,7 +307,7 @@ function normalized(obj, prop, val, normalizer) {
         configurable: true,
         enumerable: true,
         get: function() {return val;},
-        set: function(newval) {val = normalizer(newval);}
+        set: function(newval) {val = normalizer.call(this, newval);}
     });
 }
 
