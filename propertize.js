@@ -344,7 +344,7 @@ function managed(obj, prop, set, get) {
 }
 
 /**
- * Configure a property on an object which triggers a callback when changed.
+ * Configure a property on an object which triggers a callback when set.
  * @param {object} obj
  * @param {string} prop
  * @param {function} change
