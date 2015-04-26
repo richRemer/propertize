@@ -126,12 +126,19 @@ describe("propertize", function() {
         it("should update an existing property", testUpdate("value"));
 
         it("should preserve descriptors while changing value", function() {
-            var o = {};
+            var proto = {},
+                o = Object.create(proto);
+
+            prop.readonly(proto, "bar", 42);
             prop.readonly(o, "foo", 42);
 
             o.foo = 23;                 expect(o.foo).to.be(42); // rejected
             prop.value(o, "foo", 23);   expect(o.foo).to.be(23); // bypass
             o.foo = 42;                 expect(o.foo).to.be(23); // rejected
+
+            o.bar = 23;                 expect(o.bar).to.be(42); // rejected
+            prop.value(o, "bar", 23);   expect(o.bar).to.be(23); // bypass
+            o.bar = 42;                 expect(o.bar).to.be(23); // rejected
         });
     });    
 

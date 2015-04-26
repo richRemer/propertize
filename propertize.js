@@ -145,7 +145,7 @@ function locked(obj, prop, val) {
  * @param {*} val
  */
 function value(obj, prop, val) {
-    var desc = Object.getOwnPropertyDescriptor(obj, prop);
+    var desc = describe(obj, prop);
     
     // if property is already defined, remove get/set and update value
     if (desc) {
@@ -170,7 +170,7 @@ function value(obj, prop, val) {
  * @param {boolean} [configurable]
  */
 function configurable(obj, prop, configurable) {
-    var desc = Object.getOwnPropertyDescriptor(obj, prop);
+    var desc = describe(obj, prop);
     configurable = arguments.length < 3 ? true : !!configurable;
 
     // if property is already defined, update its configurable flag
@@ -191,7 +191,7 @@ function configurable(obj, prop, configurable) {
  * @param {boolean} [enumerable]
  */
 function enumerable(obj, prop, enumerable) {
-    var desc = Object.getOwnPropertyDescriptor(obj, prop);
+    var desc = describe(obj, prop);
     enumerable = arguments.length < 3 ? true : !!enumerable;
 
     // if property is already defined, update its enumerable flag
@@ -212,7 +212,7 @@ function enumerable(obj, prop, enumerable) {
  * @param {boolean} [writable]
  */
 function writable(obj, prop, writable) {
-    var desc = Object.getOwnPropertyDescriptor(obj, prop);
+    var desc = describe(obj, prop);
     writable = arguments.length < 3 ? true : !!writable;
 
     // if property is already defined, update its writable flag
@@ -232,7 +232,7 @@ function writable(obj, prop, writable) {
  * @param {function} getter
  */
 function get(obj, prop, getter) {
-    var desc = Object.getOwnPropertyDescriptor(obj, prop);
+    var desc = describe(obj, prop);
     
     // if property defined, update get in descriptor
     if (desc) desc.get = getter;
@@ -256,7 +256,7 @@ function get(obj, prop, getter) {
  * @param {function} setter
  */
 function set(obj, prop, setter) {
-    var desc = Object.getOwnPropertyDescriptor(obj, prop);
+    var desc = describe(obj, prop);
     
     // if property defined, update set in descriptor
     if (desc) desc.set = setter;
@@ -362,6 +362,24 @@ function triggered(obj, prop, change) {
         },
         get: function() {return val;}
     });
+}
+
+/**
+ * Return the current descriptor for an object property, which may be an own
+ * descriptor or a prototype descriptor.
+ * @param {object} obj
+ * @param {string} prop
+ * @returns {object}
+ */
+function describe(obj, prop) {
+    var proto = obj,
+        desc;
+
+    while (!(desc = Object.getOwnPropertyDescriptor(proto, prop))
+            && ((proto = Object.getPrototypeOf(proto)) !== Object.prototype))
+        ;
+
+    return desc;
 }
 
 /** export propertize functions */
