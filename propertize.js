@@ -405,5 +405,7 @@ module.exports = {
     managed: managed,
     normalized: normalized,
     triggered: triggered,
-    validated: validated
+    validated: validated,
+
+    describe: describe
 };

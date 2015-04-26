@@ -31,6 +31,9 @@ Common use cases for getters/setters
  * **triggered**: set non-enumerable; define get/set
  * **validated**: set enumerable; define get/set
 
+Utility
+ * **describe**: return effective property descriptor
+
 API Documentation
 -----------------
 
@@ -65,6 +68,20 @@ derived(obj, "name", function() {
 
 // "name" is now a derived property
 assert(obj.name === "Muhammad Li");
+```
+
+#### describe(obj, prop)
+Return the effective property descriptor for an object property.  This may be
+the same descriptor as Object.getOwnPropertyDescriptor or it may be from a
+prototype.
+
+**Example**
+
+```js
+var desc = require("proprtize").describe({foo:42}, "foo");
+
+assert(desc.value === 42);
+assert(desc.writable === true);
 ```
 
 #### enumerable(obj, prop, [flag])

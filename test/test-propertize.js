@@ -353,5 +353,31 @@ describe("propertize", function() {
             expect(called).to.be(true);
         });
     });
+
+    describe(".describe", function() {
+        it("should return own property descriptor", function() {
+            var obj = {foo:42},
+                desc = prop.describe(obj, "foo");
+
+            expect(desc.value).to.be(42);
+            expect(desc.writable).to.be(true);
+            expect(desc.configurable).to.be(true);
+            expect(desc.enumerable).to.be(true);
+        });
+
+        it("should return inherited property descriptor", function() {
+            var proto = {foo:42},
+                obj = Object.create(proto),
+                desc = prop.describe(obj, "foo"),
+                ownDesc = Object.getOwnPropertyDescriptor(obj, "foo");
+
+            expect(ownDesc).to.be(undefined);
+            expect(desc).to.be.an("object");
+            expect(desc.value).to.be(42);
+            expect(desc.writable).to.be(true);
+            expect(desc.configurable).to.be(true);
+            expect(desc.enumerable).to.be(true);
+        });
+    });
 });
 
