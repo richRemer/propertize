@@ -1,5 +1,6 @@
 var prop = require("..")
-    expect = require("expect.js");
+    expect = require("expect.js"),
+    sinon = require("sinon");
 
 describe("propertize", function() {
     function testAdd(fn) {
@@ -271,6 +272,27 @@ describe("propertize", function() {
             obj.foo = true;
             obj.bar = 42;
             expect(obj.bar).to.be(42);
+        });
+
+        it("should work with getter/setter", function() {
+            var obj = {},
+                spy = sinon.spy();
+
+            prop.set(obj, "foo", spy);
+            expect(spy.callCount).to.be(0);
+
+            obj.foo = 13;
+            expect(spy.callCount).to.be(1);
+
+            prop.validated(obj, "foo", function(val) {
+                return typeof val === "number";
+            });
+
+            obj.foo = 23;
+            expect(spy.callCount).to.be(2);
+
+            obj.foo = "foo";
+            expect(spy.callCount).to.be(2);
         });
     });
     

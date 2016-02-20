@@ -221,7 +221,6 @@ Future
 Breaking changes scheduled for version 3.0.
  * remove deprecated `regular` function
  * ensure getter/setter functions work together
-   * `validated` can safely layer over existing getter/setter
    * `triggered` can safely layer over existing getter/setter
    * `normalized` can safely layer over existing getter/setter
    * `managed` wipes existing getter/setter

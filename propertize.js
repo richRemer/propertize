@@ -282,13 +282,22 @@ function set(obj, prop, setter) {
  * @param {function} validator
  */
 function validated(obj, prop, val, validator) {
+    var desc = describe(obj, prop) || {};
+    
     if (arguments.length < 4) validator = val, val = obj[prop];
     Object.defineProperty(obj, prop, {
         configurable: true,
         enumerable: true,
-        get: function() {return val;},
+        get: function() {
+            return desc.get
+                ? desc.get.call(this)
+                : val;
+        },
         set: function(newval) {
-            if (validator.call(this, newval) === true) val = newval;
+            if (validator.call(this, newval) === true) {
+                val = newval;
+                if (desc.set) desc.set.call(this, newval);
+            }
         }
     });
 }
