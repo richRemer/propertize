@@ -330,6 +330,21 @@ describe("propertize", function() {
             obj.bar = "biff";
             expect(obj.bar).to.be("Bbiff");
         });
+
+        it("should work with getter/setter", function() {
+            var obj = {},
+                spy = sinon.spy();
+
+            prop.set(obj, "foo", spy);
+            expect(spy.callCount).to.be(0);
+
+            prop.normalized(obj, "foo", function(val) {
+                return Number(val);
+            });
+
+            obj.foo = "42";
+            expect(spy.calledWith(42)).to.be(true);
+        });
     });
     
     describe(".derived", function() {

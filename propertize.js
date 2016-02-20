@@ -311,12 +311,21 @@ function validated(obj, prop, val, validator) {
  * @param {function} normalizer
  */
 function normalized(obj, prop, val, normalizer) {
+    var desc = describe(obj, prop) || {};
+    
     if (arguments.length < 4) normalizer = val, val = obj[prop];
     Object.defineProperty(obj, prop, {
         configurable: true,
         enumerable: true,
-        get: function() {return val;},
-        set: function(newval) {val = normalizer.call(this, newval);}
+        get: function() {
+            return desc.get
+                ? desc.get.call(this)
+                : val;
+        },
+        set: function(newval) {
+            if (desc.set) desc.set.call(this, normalizer.call(this, newval));
+            else val = normalizer.call(this, newval);
+        }
     });
 }
 
