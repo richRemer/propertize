@@ -220,10 +220,3 @@ Future
 ------
 Breaking changes scheduled for version 3.0.
  * remove deprecated `regular` function
- * ensure getter/setter functions work together
-   * `triggered` can safely layer over existing getter/setter
-   * `managed` wipes existing getter/setter
-   * `derived` wipes existing getter/setter
-   * how do you replace the existing getter/setter in this case?
-     * `basic`/`managed`/`derived`
-

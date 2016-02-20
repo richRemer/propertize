@@ -368,17 +368,23 @@ function managed(obj, prop, set, get) {
  * @param {function} change
  */
 function triggered(obj, prop, change) {
-    var val = obj[prop];
-
+    var val = obj[prop],
+        desc = describe(obj, prop) || {};
+    
     Object.defineProperty(obj, prop, {
         configurable: true,
         enumerable: false,
         set: function(newval) {
             var oldval = val;
             val = newval;
-            change.call(obj, newval, oldval);
+            if (desc.set) desc.set.call(this, newval);
+            change.call(this, newval, oldval);
         },
-        get: function() {return val;}
+        get: function() {
+            return desc.get
+                ? desc.get.call(this)
+                : val;
+        }
     });
 }
 

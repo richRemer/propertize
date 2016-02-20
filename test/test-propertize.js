@@ -389,6 +389,25 @@ describe("propertize", function() {
             expect(obj.foo).to.be(43);
             expect(called).to.be(true);
         });
+
+        it("should work with getter/setter", function() {
+            var obj = {},
+                setter = sinon.spy(),
+                trigger = sinon.spy();
+
+            prop.set(obj, "foo", setter);
+            expect(setter.callCount).to.be(0);
+            expect(trigger.callCount).to.be(0);
+
+            obj.foo = 13;
+            expect(setter.callCount).to.be(1);
+
+            prop.triggered(obj, "foo", trigger);
+
+            obj.foo = 23;
+            expect(setter.callCount).to.be(2);
+            expect(trigger.callCount).to.be(1);
+        });
     });
 
     describe(".describe", function() {
