@@ -1,15 +1,27 @@
 /**
+ * Normalize target.
+ * @param {object|function} target
+ * @returns {object}
+ */
+function normalTarget(target) {
+    return typeof target === "function"
+        ? target.prototype
+        : target;
+}
+
+/**
  * Configure a basic property.  The property will be configurable, enumerable,
  * and writable.  If no value is provided, the current value will be used.
  * This function can be useful after you've already configured a property and
  * wish it to return back to normal behavior.
- * @param {object} obj
+ * @param {object|function} target
  * @param {string} prop
  * @param {*} [val]
  */
-function basic(obj, prop, val) {
-    if (arguments.length < 3) val = obj[prop];
-    Object.defineProperty(obj, prop, {
+function basic(target, prop, val) {
+    target = normalTarget(target);
+    if (arguments.length < 3) val = target[prop];
+    Object.defineProperty(target, prop, {
         configurable: true,
         enumerable: true,
         writable: true,
@@ -20,13 +32,14 @@ function basic(obj, prop, val) {
 /**
  * Configure a field property on an object which will not be configurable.  If
  * no value if provided, the current value will be used.
- * @param {object} obj
+ * @param {object|function} target
  * @param {string} prop
  * @param {*} [val]
  */
-function field(obj, prop, val) {
-    if (arguments.length < 3) val = obj[prop];
-    Object.defineProperty(obj, prop, {
+function field(target, prop, val) {
+    target = normalTarget(target);
+    if (arguments.length < 3) val = target[prop];
+    Object.defineProperty(target, prop, {
         configurable: false,
         enumerable: true,
         writable: true,
@@ -37,13 +50,14 @@ function field(obj, prop, val) {
 /**
  * Configure a hidden property on an object which will not be enumerable.  If
  * no value if provided, the current value will be used.
- * @param {object} obj
+ * @param {object|function} target
  * @param {string} prop
  * @param {*} [val]
  */
-function hidden(obj, prop, val) {
-    if (arguments.length < 3) val = obj[prop];
-    Object.defineProperty(obj, prop, {
+function hidden(target, prop, val) {
+    target = normalTarget(target);
+    if (arguments.length < 3) val = target[prop];
+    Object.defineProperty(target, prop, {
         configurable: true,
         enumerable: false,
         writable: true,
@@ -54,13 +68,14 @@ function hidden(obj, prop, val) {
 /**
  * Configure a read-only property on an object which will not be writable.  If
  * no value is provided, the current value will be used.
- * @param {object} obj
+ * @param {object|function} target
  * @param {string} prop
  * @param {*} [val]
  */
-function readonly(obj, prop, val) {
-    if (arguments.length < 3) val = obj[prop];
-    Object.defineProperty(obj, prop, {
+function readonly(target, prop, val) {
+    target = normalTarget(target);
+    if (arguments.length < 3) val = target[prop];
+    Object.defineProperty(target, prop, {
         configurable: true,
         enumerable: true,
         writable: false,
@@ -71,13 +86,14 @@ function readonly(obj, prop, val) {
 /**
  * Configure an internal property on an object which will not be enumerable or
  * writable.  If no value is provided, the current value will be used.
- * @param {object} obj
+ * @param {object|function} target
  * @param {string} prop
  * @param {*} [val]
  */
-function internal(obj, prop, val) {
-    if (arguments.length < 3) val = obj[prop];
-    Object.defineProperty(obj, prop, {
+function internal(target, prop, val) {
+    target = normalTarget(target);
+    if (arguments.length < 3) val = target[prop];
+    Object.defineProperty(target, prop, {
         configurable: true,
         enumerable: false,
         writable: false,
@@ -88,13 +104,14 @@ function internal(obj, prop, val) {
 /**
  * Configure an attribute property on an object which will not be configurable
  * or writable.  If no value is provided, the current value will be used.
- * @param {object} obj
+ * @param {object|function} target
  * @param {string} prop
  * @param {*} [val]
  */
-function attribute(obj, prop, val) {
-    if (arguments.length < 3) val = obj[prop];
-    Object.defineProperty(obj, prop, {
+function attribute(target, prop, val) {
+    target = normalTarget(target);
+    if (arguments.length < 3) val = target[prop];
+    Object.defineProperty(target, prop, {
         configurable: false,
         enumerable: true,
         writable: false,
@@ -105,13 +122,14 @@ function attribute(obj, prop, val) {
 /**
  * Configure a setting property on an object which will not be configurable or
  * enumerable.  If no value is provided, the current value will be used.
- * @param {object} obj
+ * @param {object|function} target
  * @param {string} prop
  * @param {*} [val]
  */
-function setting(obj, prop, val) {
-    if (arguments.length < 3) val = obj[prop];
-    Object.defineProperty(obj, prop, {
+function setting(target, prop, val) {
+    target = normalTarget(target);
+    if (arguments.length < 3) val = target[prop];
+    Object.defineProperty(target, prop, {
         configurable: false,
         enumerable: false,
         writable: true,
@@ -123,13 +141,14 @@ function setting(obj, prop, val) {
  * Configure a locked property on an object which will not be configurable,
  * enumerable, or writable.  If no value is provided, the current value will be
  * used.
- * @param {object} obj
+ * @param {object|function} target
  * @param {string} prop
  * @param {*} [val]
  */
-function locked(obj, prop, val) {
-    if (arguments.length < 3) val = obj[prop];
-    Object.defineProperty(obj, prop, {
+function locked(target, prop, val) {
+    target = normalTarget(target);
+    if (arguments.length < 3) val = target[prop];
+    Object.defineProperty(target, prop, {
         configurable: false,
         enumerable: false,
         writable: false,
@@ -140,12 +159,14 @@ function locked(obj, prop, val) {
 /**
  * Update an object property value, resetting any get/set and bypassing
  * non-writable descriptor.
- * @param {object} obj
+ * @param {object|function} target
  * @param {string} prop
  * @param {*} val
  */
-function value(obj, prop, val) {
-    var desc = describe(obj, prop);
+function value(target, prop, val) {
+    target = normalTarget(target);
+
+    var desc = describe(target, prop);
     
     // if property is already defined, remove get/set and update value
     if (desc) {
@@ -153,11 +174,11 @@ function value(obj, prop, val) {
         if (desc.get && !desc.set) desc.writable = false;
         delete desc.get;
         delete desc.set;
-        Object.defineProperty(obj, prop, desc);
+        Object.defineProperty(target, prop, desc);
     }
 
     // just set the property value to get a basic property
-    else obj[prop] = val;
+    else target[prop] = val;
 }
 
 /**
@@ -165,74 +186,82 @@ function value(obj, prop, val) {
  * flag (default to true).  In practice, the flag cannot be set to true once set
  * to false, but it may be set to true any number of times before being set to
  * false.
- * @param {object} obj
+ * @param {object|function} target
  * @param {string} prop
  * @param {boolean} [configurable]
  */
-function configurable(obj, prop, configurable) {
-    var desc = describe(obj, prop);
+function configurable(target, prop, configurable) {
+    target = normalTarget(target);
     configurable = arguments.length < 3 ? true : !!configurable;
+
+    var desc = describe(target, prop);
 
     // if property is already defined, update its configurable flag
     if (desc) {
         desc.configurable = !!configurable;
-        Object.defineProperty(obj, prop, desc);
+        Object.defineProperty(target, prop, desc);
     }
 
     // make field if configurable is being set to false
-    else if (!configurable) field(obj, prop);
+    else if (!configurable) field(target, prop);
 }
 
 /**
  * Update the configuration for an object property, setting the enumerable flag
  * (default to true).
- * @param {object} obj
+ * @param {object|function} target
  * @param {string} prop
  * @param {boolean} [enumerable]
  */
-function enumerable(obj, prop, enumerable) {
-    var desc = describe(obj, prop);
+function enumerable(target, prop, enumerable) {
+    target = normalTarget(target);
     enumerable = arguments.length < 3 ? true : !!enumerable;
+
+    var desc = describe(target, prop);
 
     // if property is already defined, update its enumerable flag
     if (desc) {
         desc.enumerable = !!enumerable;
-        Object.defineProperty(obj, prop, desc);
+        Object.defineProperty(target, prop, desc);
     }
 
     // make hidden if enumerable is being set to false
-    else if (!enumerable) hidden(obj, prop);
+    else if (!enumerable) hidden(target, prop);
 }
 
 /**
  * Update the configuration for an object property, setting the writable flag
  * (default to true).
- * @param {object} obj
+ * @param {object|function} target
  * @param {string} prop
  * @param {boolean} [writable]
  */
-function writable(obj, prop, writable) {
-    var desc = describe(obj, prop);
+function writable(target, prop, writable) {
+    target = normalTarget(target);
     writable = arguments.length < 3 ? true : !!writable;
+
+    var desc = describe(target, prop);
 
     // if property is already defined, update its writable flag
     if (desc) {
         desc.writable = !!writable;
-        Object.defineProperty(obj, prop, desc);
+        Object.defineProperty(target, prop, desc);
     }
 
     // make readonly if writable is being set to false
-    else if (!writable) readonly(obj, prop);
+    else if (!writable) readonly(target, prop);
 }
 
 /**
  * Update the configuration for an object property, setting the getter.
- * @param {object} obj
+ * @param {object|function} target
  * @param {string} prop
  * @param {function} getter
  */
-function get(obj, prop, getter) {
-    var desc = describe(obj, prop);
+function get(target, prop, getter) {
+    target = normalTarget(target);
+
+    var desc = describe(target, prop);
     
     // if property defined, update get in descriptor
     if (desc) desc.get = getter;
@@ -246,17 +275,19 @@ function get(obj, prop, getter) {
     };
 
     // define property
-    Object.defineProperty(obj, prop, desc);
+    Object.defineProperty(target, prop, desc);
 }
 
 /**
  * Update the configuration for an object property, setting the setter.
- * @param {object} obj
+ * @param {object|function} target
  * @param {string} prop
  * @param {function} setter
  */
-function set(obj, prop, setter) {
-    var desc = describe(obj, prop);
+function set(target, prop, setter) {
+    target = normalTarget(target);
+
+    var desc = describe(target, prop);
     
     // if property defined, update set in descriptor
     if (desc) desc.set = setter;
@@ -270,22 +301,24 @@ function set(obj, prop, setter) {
     };
 
     // define property
-    Object.defineProperty(obj, prop, desc);
+    Object.defineProperty(target, prop, desc);
 }
 
 /**
  * Configure a validated property on an object which will ignore updates for
  * values which return a non-true value when passed to a validator function.
- * @param {object} obj
+ * @param {object|function} target
  * @param {string} prop
  * @param {*} [val]
  * @param {function} validator
  */
-function validated(obj, prop, val, validator) {
-    var desc = describe(obj, prop) || {};
+function validated(target, prop, val, validator) {
+    target = normalTarget(target);
+
+    var desc = describe(target, prop) || {};
     
-    if (arguments.length < 4) validator = val, val = obj[prop];
-    Object.defineProperty(obj, prop, {
+    if (arguments.length < 4) validator = val, val = target[prop];
+    Object.defineProperty(target, prop, {
         configurable: true,
         enumerable: true,
         get: function() {
@@ -305,16 +338,18 @@ function validated(obj, prop, val, validator) {
 /**
  * Configure a normalized property on an object which passes a value through a
  * normalizer function before updating.
- * @param {object} obj
+ * @param {object|function} target
  * @param {string} prop
  * @param {*} [val]
  * @param {function} normalizer
  */
-function normalized(obj, prop, val, normalizer) {
-    var desc = describe(obj, prop) || {};
+function normalized(target, prop, val, normalizer) {
+    target = normalTarget(target);
+
+    var desc = describe(target, prop) || {};
     
-    if (arguments.length < 4) normalizer = val, val = obj[prop];
-    Object.defineProperty(obj, prop, {
+    if (arguments.length < 4) normalizer = val, val = target[prop];
+    Object.defineProperty(target, prop, {
         configurable: true,
         enumerable: true,
         get: function() {
@@ -332,12 +367,13 @@ function normalized(obj, prop, val, normalizer) {
 /**
  * Configure a derived property on an object which is read-only and whose value
  * is calculated by a derive function every time it is accessed.
- * @param {object} obj
+ * @param {object|function} target
  * @param {string} prop
  * @param {function} derive
  */
-function derived(obj, prop, derive) {
-    Object.defineProperty(obj, prop, {
+function derived(target, prop, derive) {
+    target = normalTarget(target);
+    Object.defineProperty(target, prop, {
         configurable: true,
         enumerable: false,
         get: derive,
@@ -347,13 +383,14 @@ function derived(obj, prop, derive) {
 
 /**
  * Configure a property on an object which has get/set handlers.
- * @param {object} obj
+ * @param {object|function} target
  * @param {string} prop
  * @param {function} set
  * @param {function} get
  */
-function managed(obj, prop, set, get) {
-    Object.defineProperty(obj, prop, {
+function managed(target, prop, set, get) {
+    target = normalTarget(target);
+    Object.defineProperty(target, prop, {
         configurable: true,
         enumerable: false,
         set: set,
@@ -363,15 +400,17 @@ function managed(obj, prop, set, get) {
 
 /**
  * Configure a property on an object which triggers a callback when set.
- * @param {object} obj
+ * @param {object|function} target
  * @param {string} prop
  * @param {function} change
  */
-function triggered(obj, prop, change) {
-    var val = obj[prop],
-        desc = describe(obj, prop) || {};
+function triggered(target, prop, change) {
+    target = normalTarget(target);
+
+    var val = target[prop],
+        desc = describe(target, prop) || {};
     
-    Object.defineProperty(obj, prop, {
+    Object.defineProperty(target, prop, {
         configurable: true,
         enumerable: false,
         set: function(newval) {
@@ -391,12 +430,12 @@ function triggered(obj, prop, change) {
 /**
  * Return the current descriptor for an object property, which may be an own
  * descriptor or a prototype descriptor.
- * @param {object} obj
+ * @param {object|function} target
  * @param {string} prop
  * @returns {object}
  */
-function describe(obj, prop) {
-    var proto = obj,
+function describe(target, prop) {
+    var proto = target,
         desc;
 
     while (!(desc = Object.getOwnPropertyDescriptor(proto, prop))

@@ -49,10 +49,22 @@ describe("propertize", function() {
         };
     }
 
+    function testFunctionTarget(fn) {
+        return function() {
+            var target = function() {};
+
+            prop[fn](target, "a", 1);
+            expect(target.a).to.be(undefined);
+            expect(target.prototype.a).to.be(1);
+        };
+    }
+
     describe(".basic", function() {
         it("should add a new property", testAdd("basic"));
         
         it("should update an existing property", testUpdate("basic"));
+
+        it("should update function prototype", testFunctionTarget("basic"));
     });
 
     describe(".field", function() {
@@ -61,6 +73,8 @@ describe("propertize", function() {
         it("should update an existing property", testUpdate("field"));
         
         it("should prevent further configuration", testNoConfig("field"));
+
+        it("should update function prototype", testFunctionTarget("field"));
     });
     
     describe(".hidden", function() {
@@ -69,6 +83,8 @@ describe("propertize", function() {
         it("should update an existing property", testUpdate("hidden"));
         
         it("should prevent property enumeration", testNoEnumerate("hidden"));
+
+        it("should update function prototype", testFunctionTarget("hidden"));
     });
 
     describe(".readonly", function() {
@@ -77,6 +93,8 @@ describe("propertize", function() {
         it("should update an existing property", testUpdate("readonly"));
         
         it("should prevent writing to the property", testNoWrite("readonly"));
+
+        it("should update function prototype", testFunctionTarget("readonly"));
     });
 
     describe(".internal", function()  {
@@ -87,6 +105,8 @@ describe("propertize", function() {
         it("should prevent property enumeration", testNoEnumerate("internal"));
         
         it("should prevent writing to the property", testNoWrite("internal"));
+
+        it("should update function prototype", testFunctionTarget("internal"));
     });
 
     describe(".attribute", function() {
@@ -97,6 +117,8 @@ describe("propertize", function() {
         it("should prevent further configuration", testNoConfig("attribute"));
         
         it("should prevent writing to the property", testNoWrite("attribute"));
+
+        it("should update function prototype", testFunctionTarget("attribute"));
     });
     
     describe(".setting", function() {
@@ -107,6 +129,8 @@ describe("propertize", function() {
         it("should prevent further configuration", testNoConfig("setting"));
         
         it("should prevent property enumeration", testNoEnumerate("setting"));
+
+        it("should update function prototype", testFunctionTarget("setting"));
     });
     
     describe(".locked", function() {
@@ -119,6 +143,8 @@ describe("propertize", function() {
         it("should prevent property enumeration", testNoEnumerate("locked"));
 
         it("should prevent writing to the property", testNoWrite("locked"));
+
+        it("should update function prototype", testFunctionTarget("locked"));
     });
 
     describe(".value", function() {
@@ -141,6 +167,8 @@ describe("propertize", function() {
             prop.value(o, "bar", 23);   expect(o.bar).to.be(23); // bypass
             o.bar = 42;                 expect(o.bar).to.be(23); // rejected
         });
+
+        it("should update function prototype", testFunctionTarget("value"));
     });    
 
     describe(".configurable", function() {

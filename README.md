@@ -36,22 +36,26 @@ Utility
 
 API Documentation
 -----------------
+All `propertize` functions accept a target object or function.  When a function
+is provided, the function's prototype will be updated rather than the function
+itself.
 
-#### attribute(obj, prop, [val])
+
+#### attribute(target, prop, [val])
 Define an enumerable, non-configurable, non-writable property on an object.  If
 no value is provided, use the existing value.  Clear any getter or setter.
 
-#### basic(obj, prop, [val])
+#### basic(target, prop, [val])
 Define a configurable, enumerable, writable property on an object.  If no value
 is provided, use the existing value.  Clear any getter or setter.
 
-#### configurable(obj, prop, [flag])
+#### configurable(target, prop, [flag])
 Add or update the configurable descriptor for an object property.  If no flag
 is provided, default to true.  Note: it is not possible to set this flag to
 true once it has been set to false.  This is by design.  Once a property's
 configuration has been removed, it cannot be undone.
 
-#### derived(obj, prop, derive)
+#### derived(target, prop, derive)
 Define a non-enumerable property with a getter used to derive the value.  The
 derive function's scope will be set to the object.
 
@@ -59,18 +63,18 @@ derive function's scope will be set to the object.
 
 ```js
 var derived = require("propertize").derived,
-    obj = {fname: "Muhammad", lname: "Li"};
+    target = {fname: "Muhammad", lname: "Li"};
 
 // configure a "name" property to be the concatenation of fname and lname
-derived(obj, "name", function() {
+derived(target, "name", function() {
     return this.fname + " " + this.lname;
 });
 
 // "name" is now a derived property
-assert(obj.name === "Muhammad Li");
+assert(target.name === "Muhammad Li");
 ```
 
-#### describe(obj, prop)
+#### describe(target, prop)
 Return the effective property descriptor for an object property.  This may be
 the same descriptor as Object.getOwnPropertyDescriptor or it may be from a
 prototype.
@@ -84,30 +88,30 @@ assert(desc.value === 42);
 assert(desc.writable === true);
 ```
 
-#### enumerable(obj, prop, [flag])
+#### enumerable(target, prop, [flag])
 Add or update the enumerable descriptor for an object property.  If no flag
 is provided, default to true.
 
-#### field(obj, prop, [val])
+#### field(target, prop, [val])
 Define an enumerable, writable, non-configurable property on an object.  If no
 value is provided, use the existing value.  Clear any getter or setter.
 
-#### get(obj, prop, getter)
+#### get(target, prop, getter)
 Update an object property getter.
 
-#### hidden(obj, prop, [val])
+#### hidden(target, prop, [val])
 Define a configurable, writable, non-enumerable property on an object.  If no
 value is provided, use the existing value.  Clear any getter or setter.
 
-#### internal(obj, prop, [val])
+#### internal(target, prop, [val])
 Define a configurable, non-enumerable, non-writable property on an object.  If
 no value is provided, use the existing value.  Clear any getter or setter.
 
-#### locked(obj, prop, [val])
+#### locked(target, prop, [val])
 Define a non-configurable, non-enumerable, non-writable property on an object.
 If no value is provided, use the existing value.  Clear any getter or setter.
 
-#### managed(obj, prop, set, get)
+#### managed(target, prop, set, get)
 Define a non-enumerable property with a getter and setter.  The set and get
 functions' scopes will be set to the object.
 
@@ -115,17 +119,17 @@ functions' scopes will be set to the object.
 
 ```js
 var managed = require("propertize").managed,
-    obj = {data: {}};
+    target = {data: {}};
 
 // proxy the "id" property to/from the object's data
-managed(obj, "id", function(val) {
+managed(target, "id", function(val) {
     this.data.id = val;
 }, function() {
     return this.data.id;
 });
 ```
 
-#### normalized(obj, prop, [val], normalize)
+#### normalized(target, prop, [val], normalize)
 Define an enumerable property with a setter which normalizes values to a
 particular form before updating.  If an optional value is passed, the value
 will skip normalization.
@@ -134,40 +138,40 @@ will skip normalization.
 
 ```js
 var normalized = require("propertize").normalized,
-    obj = {};
+    target = {};
 
 // configure a "foo" property which normalizes values to int before updating.
-normalized(obj, "foo", function(val) {
+normalized(target, "foo", function(val) {
     var intVal = parseInt(val);
     return isNaN(intVal) ? this.foo : intVal;
 });
 
 // set a string value
-obj.foo = "42";
-assert(obj.foo === 42);
+target.foo = "42";
+assert(target.foo === 42);
 
 // set a float value
-obj.foo = 42.24;
-assert(obj.foo === 42);
+target.foo = 42.24;
+assert(target.foo === 42);
 ```
 
-#### readonly(obj, prop, [val])
+#### readonly(target, prop, [val])
 Define a configurable, enumerable, non-writable property on an object.  If no
 value is provided, use the existing value.  Clear any getter or setter.
 
-#### [DEPRECATED] regular(obj, prop, [val])
+#### [DEPRECATED] regular(target, prop, [val])
 Define a configurable, enumerable, writable property on an object.  If no value
 is provided, use the existing value.  Clear any getter or setter.  This
 function is deprecated.  Use `basic` instead.
 
-#### set(obj, prop, setter)
+#### set(target, prop, setter)
 Update an object property setter.
 
-#### setting(obj, prop, [val])
+#### setting(target, prop, [val])
 Define a writable, non-configurable, non-enumerable property on an object.  If
 no value is provided, use the existing value.  Clear any getter or setter.
 
-#### triggered(obj, prop, trigger)
+#### triggered(target, prop, trigger)
 Define a non-enumerable property which triggers a callback whenever the
 property is set.
 
@@ -175,15 +179,15 @@ property is set.
 
 ```js
 var triggered = require("propertize").triggered,
-    obj = {};
+    target = {};
 
 // call function whenever "foo" property is changed
-triggered(obj, "foo", function(is, was) {
+triggered(target, "foo", function(is, was) {
     console.log("object foo changed from", was, "to", is);
 });
 ```
 
-#### validated(obj, prop, [val], validate)
+#### validated(target, prop, [val], validate)
 Define an enumerable property which rejects invalid updates.  When attempting
 to set an invalid value, the update is silently ignored.  If an optional value
 is passed, this initial value will be set without any validation.
@@ -192,27 +196,27 @@ is passed, this initial value will be set without any validation.
 
 ```js
 var validated = require("propertize").validated,
-    obj = {};
+    target = {};
 
 // configure a "foo" property which only acceptes string values
-validated(obj, "foo", function(val) {
+validated(target, "foo", function(val) {
     return typeof val === "string";
 });
 
 // set the "foo" property
-obj.foo = "Foo";
-assert(obj.foo === "Foo");
+target.foo = "Foo";
+assert(target.foo === "Foo");
 
 // attempt to set an invalid value
-obj.foo = 42;
-assert(obj.foo === "Foo");
+target.foo = 42;
+assert(target.foo === "Foo");
 ```
 
-#### value(obj, prop, val)
+#### value(target, prop, val)
 Update an object property value, even if it's non-writable.  Remove any get/set
 defined for the property.
 
-#### writable(obj, prop, [flag])
+#### writable(target, prop, [flag])
 Add or update the writable descriptor for an object property.  If no flag is
 provided, default to true.
 
