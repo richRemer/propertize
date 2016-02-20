@@ -159,11 +159,6 @@ assert(target.foo === 42);
 Define a configurable, enumerable, non-writable property on an object.  If no
 value is provided, use the existing value.  Clear any getter or setter.
 
-#### [DEPRECATED] regular(target, prop, [val])
-Define a configurable, enumerable, writable property on an object.  If no value
-is provided, use the existing value.  Clear any getter or setter.  This
-function is deprecated.  Use `basic` instead.
-
 #### set(target, prop, setter)
 Update an object property setter.
 
@@ -219,8 +214,3 @@ defined for the property.
 #### writable(target, prop, [flag])
 Add or update the writable descriptor for an object property.  If no flag is
 provided, default to true.
-
-Future
-------
-Breaking changes scheduled for version 3.0.
- * remove deprecated `regular` function
